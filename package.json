@@ -9,9 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "feedparser": "^2.2.10",
+    "feedparser-promised": "^2.0.1",
+    "next": "15.1.6",
     "react": "^19.0.0",
+    "react-datepicker": "^8.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.1.6"
+    "rss-parser": "^3.13.0",
+    "sentiment": "^5.0.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "postcss": "^8",
