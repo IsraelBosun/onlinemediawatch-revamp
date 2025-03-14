@@ -184,6 +184,8 @@ export default function NewsSearch() {
       Negative: filteredArticlesByType.negative.length
     };
 
+    console.log(counts.Positive, 'this is positive')
+
     return {
       labels: ['Positive', 'Neutral', 'Negative'],
       datasets: [
@@ -477,11 +479,11 @@ export default function NewsSearch() {
                 <div style={{ width: "100%", height: "400px" }}>
                   <Pie data={preparePieChartData()} options={pieChartOptions} />
                 </div>
-                <div className="mt-4 text-sm text-center text-gray-600">
+                {/* <div className="mt-4 text-sm text-center text-gray-600">
                   <div>Positive: {articles.positive.length} articles</div>
                   <div>Neutral: {articles.neutral.length} articles</div>
                   <div>Negative: {articles.negative.length} articles</div>
-                </div>
+                </div> */}
               </Card>
             </div>
           </div>
