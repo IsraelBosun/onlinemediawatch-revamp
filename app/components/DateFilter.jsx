@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export const Input = ({ type = 'text', placeholder, value, onChange, className = '' }) => (
   <input
@@ -6,12 +6,12 @@ export const Input = ({ type = 'text', placeholder, value, onChange, className =
     placeholder={placeholder}
     value={value}
     onChange={onChange}
-    className={`w-full p-3 rounded-lg border border-gray-300 bg-white dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent ${className}`}
+    className={`w-full py-2.5 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/60 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-all duration-200 text-sm ${className}`}
   />
 );
 
 export const Card = ({ children, className = '' }) => (
-  <div className={`p-5 bg-white dark:bg-gray-800 rounded-lg shadow-md transition-shadow hover:shadow-lg ${className}`}>
+  <div className={`bg-white dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-sm ${className}`}>
     {children}
   </div>
 );
@@ -19,21 +19,23 @@ export const Card = ({ children, className = '' }) => (
 export const Tab = ({ active, onClick, children }) => (
   <button
     onClick={onClick}
-    className={`px-6 py-3 text-sm font-medium focus:outline-none transition-colors duration-200 
+    className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 whitespace-nowrap
       ${active
-        ? 'text-blue-600 border-b-2 border-blue-600 bg-white dark:bg-gray-800'
-        : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:border-b-2 hover:border-blue-300'}`}
+        ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
+        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+      }`}
   >
     {children}
   </button>
 );
 
 export const Button = ({ onClick, disabled, variant = 'primary', children, className = '', type = 'button' }) => {
-  const baseStyles = "py-3 px-4 rounded-lg font-medium transition-colors duration-200 focus:outline-none";
+  const base = "py-2.5 px-5 rounded-xl text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center justify-center gap-2 active:scale-[0.98]";
   const variants = {
-    primary: "bg-blue-600 hover:bg-blue-700 text-white",
-    success: "bg-green-600 hover:bg-green-700 text-white",
-    outline: "border border-gray-300 bg-white hover:bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+    primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 focus:ring-blue-500",
+    success: "bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-500/20 focus:ring-emerald-500",
+    outline: "border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 focus:ring-slate-400",
+    ghost: "bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300",
   };
 
   return (
@@ -41,190 +43,41 @@ export const Button = ({ onClick, disabled, variant = 'primary', children, class
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${baseStyles} ${variants[variant]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
+      className={`${base} ${variants[variant]} ${disabled ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''} ${className}`}
     >
       {children}
     </button>
   );
 };
 
-export const FiltersPanel = () => {
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-
-  return (
-    <div className="mb-6 bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
-      <h3 className="text-lg font-medium mb-3">Filters</h3>
-
-      {/* Date range */}
-      <div className="mb-4">
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <label className="block text-xs mb-1">From</label>
-            <Input
-              type="date"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block text-xs mb-1">To</label>
-            <Input
-              type="date"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+export const getSentimentColor = (score) => {
+  if (score > 0) return 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-700/50';
+  if (score < 0) return 'bg-rose-100 text-rose-700 border-rose-200 dark:bg-rose-900/30 dark:text-rose-400 dark:border-rose-700/50';
+  return 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-700/50';
 };
 
-export const getSentimentColor = (score) => {
-    if (score > 0) return 'bg-green-100 text-green-800 border-green-200';
-    if (score < 0) return 'bg-red-100 text-red-800 border-red-200';
-    return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-  };
+export const StatCard = ({ label, value, percentage, colorClass }) => (
+  <div className={`p-5 rounded-2xl border ${colorClass} animate-fade-in`}>
+    <p className="text-xs font-semibold uppercase tracking-wider opacity-60 mb-2">{label}</p>
+    <p className="text-3xl font-black">{value}</p>
+    {percentage !== undefined && (
+      <p className="text-xs opacity-50 mt-1 font-medium">{percentage}% of total</p>
+    )}
+  </div>
+);
 
-
-  export const ResultsSection = ({
-    filteredArticles = [],
-    filter,
-    setFilter,
-    sortOrder,
-    setSortOrder,
-    getSentimentColor,
-    handleDownload
-  }) => (
-    <div className="mt-8">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md mb-4">
-        <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center">
-          <h2 className="text-xl font-semibold">
-            Results <span className="text-gray-500 text-sm">({filteredArticles.length} articles)</span>
-          </h2>
-          <div className="flex items-center space-x-2">
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="p-2 text-sm rounded-lg border border-gray-300 bg-white dark:bg-gray-800"
-            >
-              <option value="all">All Results</option>
-              <option value="positive">Positive</option>
-              <option value="neutral">Neutral</option>
-              <option value="negative">Negative</option>
-            </select>
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-              className="p-2 text-sm rounded-lg border border-gray-300 bg-white dark:bg-gray-800"
-            >
-              <option value="newest">Newest First</option>
-              <option value="oldest">Oldest First</option>
-            </select>
-          </div>
-        </div>
-  
-        {filteredArticles.length > 0 ? (
-          <div className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredArticles.map((article, index) => (
-                <Card key={index} className="h-full">
-                  <div className="flex justify-between items-start mb-2">
-                    <span className={`px-3 py-1 text-xs font-medium rounded-full border ${getSentimentColor(article.sentimentScore)}`}>
-                      {article.sentimentScore > 0 ? 'Positive' : article.sentimentScore < 0 ? 'Negative' : 'Neutral'}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      {new Date(article.date).toLocaleDateString(undefined, {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                      })}
-                    </span>
-                  </div>
-  
-                  <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-                    <a href={article.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline dark:text-blue-400">
-                      {article.title}
-                    </a>
-                  </h3>
-  
-                  <p className="text-gray-700 dark:text-gray-300 mb-2 line-clamp-3 text-sm">{article.summary}</p>
-  
-                  {article.searchItem && (
-                    <div className="mt-2 text-xs text-gray-500">
-                      Search term: <span className="font-medium">{article.searchItem}</span>
-                    </div>
-                  )}
-                </Card>
-              ))}
-            </div>
-  
-            <div className="mt-6 flex justify-center">
-              <Button onClick={handleDownload} variant="success" disabled={!filteredArticles.length}>
-                Export Results
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-64 p-8 text-center">
-            <svg className="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg>
-            <p className="text-gray-500">No articles found.</p>
-          </div>
-        )}
-      </div>
+export const SkeletonCard = () => (
+  <div className="p-5 bg-white dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700/60 space-y-3">
+    <div className="flex justify-between">
+      <div className="h-5 w-20 skeleton rounded-full" />
+      <div className="h-5 w-24 skeleton rounded-full" />
     </div>
-  );
-  
-  
-
-
-
-// // Reusable components
-// const Button = ({ onClick, disabled, variant = 'primary', children, className = '', type = 'button' }) => {
-//   const baseStyles = "py-3 px-4 rounded-lg font-medium transition-colors duration-200 focus:outline-none";
-//   const variants = {
-//     primary: "bg-blue-600 hover:bg-blue-700 text-white",
-//     success: "bg-green-600 hover:bg-green-700 text-white",
-//     outline: "border border-gray-300 bg-white hover:bg-gray-50 text-gray-800 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-//   };
-
-//   return (
-//     <button
-//       type={type}
-//       onClick={onClick}
-//       disabled={disabled}
-//       className={`${baseStyles} ${variants[variant]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
-//     >
-//       {children}
-//     </button>
-//   );
-// };
-
-// const Input = ({ type = 'text', placeholder, value, onChange, className = '' }) => (
-//   <input
-//     type={type}
-//     placeholder={placeholder}
-//     value={value}
-//     onChange={onChange}
-//     className={`w-full p-3 rounded-lg border border-gray-300 bg-white dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent ${className}`}
-//   />
-// );
-
-// const Card = ({ children, className = '' }) => (
-//   <div className={`p-5 bg-white dark:bg-gray-800 rounded-lg shadow-md transition-shadow hover:shadow-lg ${className}`}>
-//     {children}
-//   </div>
-// );
-
-// const Tab = ({ active, onClick, children }) => (
-//   <button
-//     onClick={onClick}
-//     className={`px-6 py-3 text-sm font-medium focus:outline-none transition-colors duration-200 
-//       ${active
-//         ? 'text-blue-600 border-b-2 border-blue-600 bg-white dark:bg-gray-800'
-//         : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:border-b-2 hover:border-blue-300'}`}
-//   >
-//     {children}
-//   </button>
-// );
+    <div className="h-5 w-full skeleton rounded-lg" />
+    <div className="h-5 w-3/4 skeleton rounded-lg" />
+    <div className="space-y-2 pt-1">
+      <div className="h-3 w-full skeleton rounded" />
+      <div className="h-3 w-5/6 skeleton rounded" />
+      <div className="h-3 w-4/5 skeleton rounded" />
+    </div>
+  </div>
+);
